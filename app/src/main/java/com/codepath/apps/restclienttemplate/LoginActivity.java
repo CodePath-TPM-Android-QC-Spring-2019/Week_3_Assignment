@@ -1,36 +1,29 @@
 package com.codepath.apps.restclienttemplate;
 
-import android.annotation.SuppressLint;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
-import com.codepath.apps.restclienttemplate.models.SampleModel;
-import com.codepath.apps.restclienttemplate.models.SampleModelDao;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
-import com.codepath.oauth.OAuthLoginActivity;
 
-public class LoginActivity extends OAuthLoginActionBarActivity<RestClient> {
+public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
-		final SampleModel sampleModel = new SampleModel();
-		sampleModel.setName("CodePath");
-
-		final SampleModelDao sampleModelDao = ((RestApplication) getApplicationContext()).getMyDatabase().sampleModelDao();
-
-		AsyncTask<SampleModel, Void, Void> task = new AsyncTask<SampleModel, Void, Void>() {
-			@Override
-			protected Void doInBackground(SampleModel... sampleModels) {
-				sampleModelDao.insertModel(sampleModels);
-				return null;
-			};
-		};
-		task.execute(sampleModel);
+//		final SampleModelDao sampleModelDao = ((TwitterApplication) getApplicationContext()).getMyDatabase().sampleModelDao();
+//
+//		AsyncTask<Tweet, Void, Void> task = new AsyncTask<Tweet, Void, Void>() {
+//			@Override
+//			protected Void doInBackground(Tweet... sampleModels) {
+//				sampleModelDao.insertModel(sampleModels);
+//				return null;
+//			};
+//		};
+//		task.execute(tweet);
 	}
 
 
@@ -45,22 +38,19 @@ public class LoginActivity extends OAuthLoginActionBarActivity<RestClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		// Intent i = new Intent(this, PhotosActivity.class);
-		// startActivity(i);
+		Log.d("_AF", "~~~~~~~~Twitter login success~~~~~~~~");
+		 Intent i = new Intent(this, TimelineActivity.class);
+		 startActivity(i);
 	}
 
 	// OAuth authentication flow failed, handle the error
 	// i.e Display an error dialog or toast
 	@Override
-	public void onLoginFailure(Exception e) {
-		e.printStackTrace();
-	}
+	public void onLoginFailure(Exception e) {Log.e("_AF", "onLoginFailure: " + e.getMessage());}
 
 	// Click handler method for the button used to start OAuth flow
 	// Uses the client to initiate OAuth authorization
 	// This should be tied to a button used to login
-	public void loginToRest(View view) {
-		getClient().connect();
-	}
+	public void loginToRest(View view) {getClient().connect();}
 
 }
